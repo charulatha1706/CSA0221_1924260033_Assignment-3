@@ -1,0 +1,109 @@
+#include <stdio.h>
+
+#define MAX_CANDIDATES 12
+#define MAX_VOTES 5000
+
+int main()
+{
+    int votes[MAX_CANDIDATES] = {0};
+    int totalVotes, candidateID;
+    int validVotes = 0, invalidVotes = 0;
+    int i, j, temp;
+    int maxVotes = 0, tie = 0;
+
+    printf("Enter total number of votes: ");
+    scanf("%d", &totalVotes);
+
+    if (totalVotes < 0 || totalVotes > MAX_VOTES)
+    {
+        printf("Invalid number of votes.\n");
+        return 1;
+    }
+
+    printf("Enter candidate IDs (1 to 12):\n");
+
+    for (i = 0; i < totalVotes; i++)
+    {
+        scanf("%d", &candidateID);
+
+        if (candidateID >= 1 && candidateID <= MAX_CANDIDATES)
+        {
+            votes[candidateID - 1]++;
+            validVotes++;
+        }
+        else
+        {
+            invalidVotes++;
+        }
+    }
+
+    printf("\nValid Votes: %d\n", validVotes);
+    printf("Invalid Votes: %d\n", invalidVotes);
+
+    printf("\nCandidate-wise Vote Count:\n");
+
+    for (i = 0; i < MAX_CANDIDATES; i++)
+    {
+        printf("Candidate %d: %d votes\n",
+               i + 1, votes[i]);
+    }
+
+    // Find maximum votes
+    for (i = 0; i < MAX_CANDIDATES; i++)
+    {
+        if (votes[i] > maxVotes)
+        {
+            maxVotes = votes[i];
+        }
+    }
+
+    // Check for tie
+    for (i = 0; i < MAX_CANDIDATES; i++)
+    {
+        if (votes[i] == maxVotes)
+        {
+            tie++;
+        }
+    }
+
+    if (tie > 1)
+    {
+        printf("\nElection Result: Tie between candidates.\n");
+        printf("Highest Votes: %d\n", maxVotes);
+    }
+    else
+    {
+        for (i = 0; i < MAX_CANDIDATES; i++)
+        {
+            if (votes[i] == maxVotes)
+            {
+                printf("\nWinner: Candidate %d\n", i + 1);
+                printf("Votes: %d\n", maxVotes);
+            }
+        }
+    }
+
+    // Sort candidates by vote count in descending order
+    for (i = 0; i < MAX_CANDIDATES - 1; i++)
+    {
+        for (j = 0; j < MAX_CANDIDATES - i - 1; j++)
+        {
+            if (votes[j] < votes[j + 1])
+            {
+                temp = votes[j];
+                votes[j] = votes[j + 1];
+                votes[j + 1] = temp;
+            }
+        }
+    }
+
+    printf("\nVotes in Descending Order:\n");
+
+    for (i = 0; i < MAX_CANDIDATES; i++)
+    {
+        printf("%d ", votes[i]);
+    }
+
+    return 0;
+}
+
