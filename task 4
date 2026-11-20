@@ -1,1 +1,87 @@
+#include <stdio.h>
+
+#define DISTRICTS 38
+#define MONTHS 12
+
+int rain[DISTRICTS][MONTHS];
+
+void calculateAnnualTotals()
+{
+    for (int i = 0; i < DISTRICTS; i++)
+    {
+        int total = 0;
+
+        for (int j = 0; j < MONTHS; j++)
+            total += rain[i][j];
+
+        printf("District %d Annual Total = %d\n", i + 1, total);
+    }
+}
+
+void calculateMonthlyAverages()
+{
+    for (int j = 0; j < MONTHS; j++)
+    {
+        int total = 0;
+
+        for (int i = 0; i < DISTRICTS; i++)
+            total += rain[i][j];
+
+        printf("Month %d Average = %.2f\n",
+               j + 1, (float)total / DISTRICTS);
+    }
+}
+
+void findWettestMonth()
+{
+    int max = rain[0][0];
+    int district = 0, month = 0;
+
+    for (int i = 0; i < DISTRICTS; i++)
+    {
+        for (int j = 0; j < MONTHS; j++)
+        {
+            if (rain[i][j] > max)
+            {
+                max = rain[i][j];
+                district = i;
+                month = j;
+            }
+        }
+    }
+
+    printf("Maximum Rainfall = %d\n", max);
+    printf("District = %d, Month = %d\n",
+           district + 1, month + 1);
+}
+
+void findDeficientDistricts()
+{
+    float stateTotal = 0;
+
+    for (int i = 0; i < DISTRICTS; i++)
+    {
+        for (int j = 0; j < MONTHS; j++)
+            stateTotal += rain[i][j];
+    }
+
+    float stateAverage = stateTotal / (DISTRICTS * MONTHS);
+    float threshold = 0.60 * stateAverage;
+
+    printf("State Average Rainfall = %.2f\n", stateAverage);
+    printf("Deficient Districts:\n");
+
+    for (int i = 0; i < DISTRICTS; i++)
+    {
+        float districtTotal = 0;
+
+        for (int j = 0; j < MONTHS; j++)
+            districtTotal += rain[i][j];
+
+        if (districtTotal < threshold)
+            printf("District %d\n", i + 1);
+    }
+}
+
+
 
